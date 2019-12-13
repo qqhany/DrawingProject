@@ -1,0 +1,571 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Q online! T-Design</title>
+    <!--references to external and necessary javascript and css files-->
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/fabric.js/1.4.0/fabric.min.js "></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.5/angular.min.js"></script>
+    <!--Support the color picker object-->
+    <script src="Scrips/spectrum.js"></script>
+
+    <!--Style for the side and top pannels-->
+    <link href="Style/slide.css" rel="stylesheet" />
+    <!--the style of the site-->
+    <link href="Style/Style.css" rel="stylesheet" />
+    <!-- Java and css for pop up menu items -->
+    <script src="Scrips/jquery-1.4.4.min.js"></script>
+    <script src="Scrips/jquery.reveal.js"></script>
+    <link href="Scrips/reveal.css" rel="stylesheet" />
+
+</head>
+
+<body>
+
+    <!--The site is a 3 column responsive (hopefully design)-->
+    <!--http://www.responsivegridsystem.com-->
+    <div id="column1-wrap">
+        <a href="#" id="mygallerymodal" data-reveal-id="myModal1" class="styled-select_locate_login">login</a>
+        <!--<label class="styled-select_locate_login" id="mymodal1" onclick="">Login</label>-->
+        <label class="styled-select_locate_login">Register</label>
+
+
+        <div id="column1">
+            <div id="canvas-controls">
+                <canvas id="canvas1" width="580" height="500" style="border:dotted red;"></canvas>
+            </div>
+            <!--Modal pop up to manage the loading of photos from user computer-->
+            <!--http://zurb.com/playground/reveal-modal-plugin-->
+            <div id="myModal" class="reveal-modal">
+                <h2>Pick your files to upload</h2>
+                <p><input id="imgLoader" type="file" /></p>
+                <a class="close-reveal-modal">&#215;</a>
+            </div>
+            <div id="myModal1" class="reveal-modal">
+
+                <form name="login" action="#" method="post">
+                    <center>Username:</center>
+                    <center><input name="username" size="14" /></center>
+                    <center>Password:</center>
+                    <center><input name="password" type="password" size="14" /></center>
+                    <center><input type="submit" name="submit" value="login" /></center>
+                </form>
+
+                <a class="close-reveal-modal">&#215;</a>
+            </div>
+            <!--Art gallery  modal pop -->
+            <div id="myModal2" class="reveal-modalGallery">
+                <button id="submitButtonFormat" type="submit" value="submit" onclick="addTriang()" style="width:120px"> Triangle </button><br />
+                <br />  <button id="submitButtonFormat" type="submit" value="submit" onclick="addRect()" style="width:120px"> Rectangle </button><br />
+
+                <br />
+                <hr />
+                <a class="close-reveal-modal">&#215 Click Here To Close</a>
+            </div>
+        </div>
+
+
+        <!--Map area with tshirt-->
+        <div id="column2">
+
+            <div id="minimap">
+
+                <canvas id='Mmap' width="578" height="520" style="background: url('/image/tshirt.jpg') no-repeat center center; "></canvas>
+            </div>
+
+        </div>
+    </div>
+
+    <!--The side pannel and containers will host the drawing tool-->
+    <div id="container">
+        <div id="panel">
+            <div class='demo' id='colors_demo'>
+                <div class='tools'>
+                    <button id="drawing-mode" style="width:120px">Enter drawing mode</button>
+
+                    <!--<a href='#colors_sketch' data-download='png' style='float: inherit; width: 120px;'>Save</a><br />
+                    <a href='#colors_sketch' data-tool="eraser" style=' width: 120px;'>Eraser</a><br />-->
+
+                    <label id="lblDrawingNote" style="width:120px">Marker Size</label>
+                    <input type="range" value="0" min="0" max="50" id="drawing-line-width" style="width:120px">
+
+                    <label id="lblDrawingNote" style="width:120px">Color Picker</label>
+                    <input type="color" value="#005E7A" id="drawing-color" style=' width: 120px;'>
+
+                    <label id="lblDrawingNote" style="width:120px">Add Shapes</label>
+                    <a href="#" data-reveal-id="myModal2" class="styled-button-8">Artwork Gallery</a>
+                    <hr />
+                    <!--Add upload and image group-->
+                    <label id="lblImgObjects" style="width:140px">Image Objects</label>
+                    <a href="#" data-reveal-id="myModal" class="styled-button-8">Upload Photos:</a>
+                    <a href="#" class="styled-button-8" onclick="greyImage()">Grey Img</a>
+                    <a href="#" class="styled-button-8" onclick="sepiaImage()">Speia Img</a>
+                    <!--<label>Remove white:<input type="checkbox" id="remove-white"></label><br>
+                    <label>Threshold: <input type="range" id="remove-white-threshold" value="60" min="0" max="255"></label>
+                    <br>
+                    <label>Distance: <input type="range" id="remove-white-distance" value="10" min="0" max="255"></label>
+                    <hr />-->
+                    <label id="lblDrawingNote" style="width:120px">Enter Text</label>
+                    <textarea id="TextArea1" title="Enter_Words_Title" style="width:140px; height:40px;">Enter Words</textarea>
+                    <a href="#" style="width:120px" class="styled-button-1" onclick="addTextMsg()">add Text</a>
+                    <!-- <button id="add-text-msg" type="submit" value="submit" onclick="addTextMsg()" style="width:120px"> add Txt</button><br />-->
+                    <hr class="style-one" />
+                    <button id="clear-canvas" class="styled-button-6" style="width:120px">clear all</button>
+                    <button class="styled-button-6" id="remove-selected" ng-click="removeSelected()">
+                        Deleted selected
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div id="contact">
+
+            <div id="left">
+                <label id="ShowBrush">
+                    Brush:
+                    <select id="drawing-mode-selector" class="styled-select_select-1">
+                        <option>Pencil</option>
+                        <option>Circle</option>
+                        <option>Spray</option>
+                    </select>
+                </label>
+            </div>
+            <div id="middle">
+                <img src="image/qDesign.png" width="150" height="40" />
+            </div>
+            <div id="right">
+                <button id="Submit5" class="styled-button-611" type="submit" value="submit" onclick="ShowMe()">Show on t-shirt</button>
+            </div>
+            <br />
+        </div>
+        <!--</div>-->
+
+        <div id="myModal1" class="reveal-modal">
+
+            <form name="login" action="" method="post">
+                <center>Username:</center>
+                <center><input name="username" size="14" /></center>
+                <center>Password:</center>
+                <center><input name="password" type="password" size="14" /></center>
+                <center><input type="submit" name="submit" value="login" /></center>
+            </form>
+
+            <a class="close-reveal-modal">&#215;</a>
+        </div>
+
+    </div>
+    
+
+        <script>
+
+            var $ = function (id) { return document.getElementById(id) };
+            var canvas = this.__canvas = new fabric.Canvas('canvas1', {
+                isDrawingMode: true
+            });
+
+
+            var clearEl = $('clear-canvas');
+            var drawingModeEl = $('drawing-mode');
+            var drawingColorEl = $('drawing-color');
+            var drawingLineWidthEl = $('drawing-line-width');
+            var drawingOptionsEl = $('drawing-mode-options');
+            var drawingShadowColorEl = $('drawing-shadow-color');
+            var removeObjectE1 = $('remove-selected');
+            var uploadObjectE1 = $('imgLoader');
+            //var addTextMsg = $('add-text-msg');
+
+
+
+
+            //add a text message
+
+            function addTextMsg() {
+
+                var comicSansText = new fabric.Text(
+                      $("TextArea1").value,
+                      {
+                          fontFamily: 'Comic Sans'
+                      });
+                canvas.add(comicSansText);
+            };//
+
+
+
+
+
+            // provide a clear canvas
+            clearEl.onclick = function () {
+                canvas.clear()
+            };//end
+
+
+            //Delete an Object from the canvas.
+            removeObjectE1.onclick = function () {
+                var activeObject = canvas.getActiveObject(), activeGroup = canvas.getActiveGroup();
+
+                if (activeGroup) {
+                    var objectsInGroup = activeGroup.getObjects();
+                    canvas.discardActiveGroup();
+                    objectsInGroup.forEach(function (object) {
+                        canvas.remove(object);
+                    });
+                }
+                else if (activeObject) {
+                    canvas.remove(activeObject);
+                }
+
+            };//end
+
+            //Helper to get the active property of currenly selected object
+            function getActiveProp(name) {
+                var object = canvas.getActiveObject();
+                if (!object) return '';
+
+                return object[name] || '';
+            };//end
+
+            var textAreaBox1 = $("TextArea1");
+            //Get and set text values
+            textAreaBox1.getText = function () {
+                return getActiveProp('text');
+            };
+            textAreaBox1.setText = function (value) {
+                setActiveProp('text', value);
+            };
+            //end
+
+            //start to draw and test for when the button to sstop click is fired
+            drawingModeEl.onclick = function () {
+                canvas.isDrawingMode = !canvas.isDrawingMode;
+                if (canvas.isDrawingMode) {
+                    drawingModeEl.innerHTML = 'Cancel drawing mode';
+                    drawingOptionsEl.style.display = '';
+                }
+                else {
+                    drawingModeEl.innerHTML = 'Enter drawing mode';
+                    drawingOptionsEl.style.display = 'none';
+                }
+            };
+
+            drawingColorEl.onchange = function () {
+                canvas.freeDrawingBrush.color = this.value;
+            };
+
+            drawingLineWidthEl.onchange = function () {
+                canvas.freeDrawingBrush.width = parseInt(this.value, 10) || 1;
+                this.previousSibling.innerHTML = this.value;
+            };
+            if (fabric.PatternBrush) {
+                var vLinePatternBrush = new fabric.PatternBrush(canvas);
+                vLinePatternBrush.getPatternSrc = function () {
+
+                    var patternCanvas = fabric.document.createElement('canvas');
+                    patternCanvas.width = patternCanvas.height = 10;
+                    var ctx = patternCanvas.getContext('2d');
+
+                    ctx.strokeStyle = this.color;
+                    ctx.lineWidth = 5;
+                    ctx.beginPath();
+                    ctx.moveTo(0, 5);
+                    ctx.lineTo(10, 5);
+                    ctx.closePath();
+                    ctx.stroke();
+
+                    return patternCanvas;
+                };
+
+
+
+                var hLinePatternBrush = new fabric.PatternBrush(canvas);
+                hLinePatternBrush.getPatternSrc = function () {
+
+                    var patternCanvas = fabric.document.createElement('canvas');
+                    patternCanvas.width = patternCanvas.height = 10;
+                    var ctx = patternCanvas.getContext('2d');
+
+                    ctx.strokeStyle = this.color;
+                    ctx.lineWidth = 5;
+                    ctx.beginPath();
+                    ctx.moveTo(5, 0);
+                    ctx.lineTo(5, 10);
+                    ctx.closePath();
+                    ctx.stroke();
+
+                    return patternCanvas;
+                };
+
+                var squarePatternBrush = new fabric.PatternBrush(canvas);
+                squarePatternBrush.getPatternSrc = function () {
+
+                    var squareWidth = 10, squareDistance = 2;
+
+                    var patternCanvas = fabric.document.createElement('canvas');
+                    patternCanvas.width = patternCanvas.height = squareWidth + squareDistance;
+                    var ctx = patternCanvas.getContext('2d');
+
+                    ctx.fillStyle = this.color;
+                    ctx.fillRect(0, 0, squareWidth, squareWidth);
+
+                    return patternCanvas;
+                };
+
+                var diamondPatternBrush = new fabric.PatternBrush(canvas);
+                diamondPatternBrush.getPatternSrc = function () {
+
+                    var squareWidth = 10, squareDistance = 5;
+                    var patternCanvas = fabric.document.createElement('canvas');
+                    var rect = new fabric.Rect({
+                        width: squareWidth,
+                        height: squareWidth,
+                        angle: 45,
+                        fill: this.color
+                    });
+
+                    var canvasWidth = rect.getBoundingRectWidth();
+
+                    patternCanvas.width = patternCanvas.height = canvasWidth + squareDistance;
+                    rect.set({ left: canvasWidth / 2, top: canvasWidth / 2 });
+
+                    var ctx = patternCanvas.getContext('2d');
+                    rect.render(ctx);
+
+                    return patternCanvas;
+                };
+
+                var img = new Image();
+                img.src = '../assets/honey_im_subtle.png';
+
+                var texturePatternBrush = new fabric.PatternBrush(canvas);
+                texturePatternBrush.source = img;
+            }
+
+
+
+            $('drawing-mode-selector').onchange = function () {
+
+                if (this.value === 'hline') {
+                    canvas.freeDrawingBrush = vLinePatternBrush;
+                }
+                else if (this.value === 'vline') {
+                    canvas.freeDrawingBrush = hLinePatternBrush;
+                }
+                else if (this.value === 'square') {
+                    canvas.freeDrawingBrush = squarePatternBrush;
+                }
+                else if (this.value === 'diamond') {
+                    canvas.freeDrawingBrush = diamondPatternBrush;
+                }
+                else if (this.value === 'texture') {
+                    canvas.freeDrawingBrush = texturePatternBrush;
+                }
+                else {
+                    canvas.freeDrawingBrush = new fabric[this.value + 'Brush'](canvas);
+                }
+
+                if (canvas.freeDrawingBrush) {
+                    canvas.freeDrawingBrush.color = drawingColorEl.value;
+                    canvas.freeDrawingBrush.width = parseInt(drawingLineWidthEl.value, 10) || 1;
+                    // canvas.freeDrawingBrush.shadowBlur = parseInt(drawingShadowWidth.value, 10) || 0;
+                }
+            };
+
+
+
+
+            drawingColorEl.onchange = function () {
+                canvas.freeDrawingBrush.color = this.value;
+            };
+            //drawingShadowColorEl.onchange = function () {
+            //   // canvas.freeDrawingBrush.shadowColor = this.value;
+            //};
+            drawingLineWidthEl.onchange = function () {
+                canvas.freeDrawingBrush.width = parseInt(this.value, 10) || 1;
+                this.previousSibling.innerHTML = this.value;
+            };
+        
+
+            if (canvas.freeDrawingBrush) {
+                canvas.freeDrawingBrush.color = drawingColorEl.value;
+                canvas.freeDrawingBrush.width = parseInt(drawingLineWidthEl.value, 10) || 1;
+                canvas.freeDrawingBrush.shadowBlur = 0;
+            };
+
+
+
+            function addRect() {
+                // create a rectangle with angle=45
+                var rect = new fabric.Rect({
+                    left: 100,
+                    top: 100,
+                    fill: 'red',
+                    width: 20,
+                    height: 20,
+                    angle: 45
+                });
+
+                canvas.add(rect);
+            }
+
+            function addTriang() {
+                // create a rectangle with angle=45
+                var triangle = new fabric.Triangle({
+                    width: 20, height: 30, fill: 'blue', left: 50, top: 50
+                });
+                canvas.add(triangle);
+            }
+
+            function addImage() {
+                fabric.Image.fromURL('image/select.jpg', function (oImg) {
+                    canvas.add(oImg);
+                });
+            }
+
+
+
+            // Function that will be called when the image upload popup button is clicked.
+            document.getElementById('imgLoader').onchange = function handleImage(e) {
+
+                var reader = new FileReader();
+                reader.onload = function (event) {
+                    var imgObj = new Image();
+                    imgObj.src = event.target.result;
+                    imgObj.onload = function () {
+                        var image = new fabric.Image(imgObj);
+                        image.set({
+                            angle: 0,
+                            padding: 10,
+                            cornersize: 10,
+                            height: 110,
+                            width: 110,
+                        });
+                        canvas.centerObject(image);
+                        canvas.add(image);
+                        canvas.renderAll();
+                    }
+                }
+                reader.readAsDataURL(e.target.files[0]);
+            }//end
+
+
+
+
+
+
+            function greyImage() {
+                var obj = canvas.getActiveObject();
+                var filter1 = new fabric.Image.filters.Grayscale();
+                obj.filters.push(filter1);
+                // apply filters and re-render canvas when done
+                obj.applyFilters(canvas.renderAll.bind(canvas));
+
+                // add image onto canvas
+                //  canvas.add(img);
+            }
+
+            function sepiaImage() {
+                var obj = canvas.getActiveObject();
+                var filter1 = new fabric.Image.filters.Sepia;
+                obj.filters.push(filter1);
+                // apply filters and re-render canvas when done
+                obj.applyFilters(canvas.renderAll.bind(canvas));
+
+            }//end s
+
+            function applyFilter(index, filter) {
+                var obj = canvas.getActiveObject();
+                obj.filters[index] = filter;
+                obj.applyFilters(canvas.renderAll.bind(canvas));
+            }
+
+            function applyFilterValue(index, prop, value) {
+
+                var obj = canvas.getActiveObject();
+                if (obj.filters[index]) {
+                    obj.filters[index][prop] = value;
+                    obj.applyFilters(canvas.renderAll.bind(canvas));
+                }
+            }
+
+            var filters = ['grayscale', 'invert', 'remove-white', 'sepia', 'sepia2',
+                          'brightness', 'noise', 'gradient-transparency', 'pixelate',
+                          'blur', 'sharpen', 'emboss', 'tint', 'multiply'];
+
+            var thresholdE1 = $('remove-white-threshold');
+            var distanceE1 = $('remove-white-distance');
+            var f = fabric.Image.filters;
+            $('remove-white').onclick = function () {
+
+                applyFilter(2, this.checked && new f.RemoveWhite({
+                    threshold: $('remove-white-threshold').value,
+                    distance: $('remove-white-distance').value
+                }));
+            };
+
+
+            thresholdE1.onchange = function () {
+                applyFilterValue(2, 'threshold', this.value);
+            };
+
+            distanceE1.onchange = function () {
+                applyFilterValue(2, 'distance', this.value);
+            };
+
+        </script>
+
+
+
+
+        <script>
+            //to display on the minimap
+            function ShowMe() {
+
+                var destinationCanvas = document.getElementById('Mmap');
+
+                //grab the context from your destination canvas
+                var destCtx = destinationCanvas.getContext('2d');
+                destCtx.clearRect(0, 0, canvas.width, canvas.height);
+                //call its drawImage() function passing it the source canvas directly
+                destCtx.drawImage(canvas1, 165, 130, 250, 275);
+
+
+
+            }</script>
+
+        <!--pop out side bar javascript-->
+        <script>
+            $(document).ready(function () {
+                var pos = 'in';
+                $("#GalleryDiv").click(function () {
+                    if (pos == 'in') {
+                        $("#containerGalleryDiv").animate({
+                            left: '0px'
+                        });
+                        pos = 'out';
+                    }
+                    else {
+                        $("#containerGalleryDIV").animate({
+                            left: '-120px'
+                        });
+                        pos = 'in';
+                    }
+                });
+
+            });
+
+            function putImage() {
+                var canvas1 = document.getElementById("minimap");
+                if (canvas1.getContext) {
+                    var ctx = canvas1.getContext("2d");
+                    var image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+
+                }
+                var imageElement = document.getElementById("MyPix");
+                imageElement.src = myImage;
+
+            }
+        </script>
+        
+
+</body>
+</html>
